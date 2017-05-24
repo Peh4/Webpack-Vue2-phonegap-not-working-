@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import VueSocketio from 'vue-socket.io'
 
 Vue.config.productionTip = false
 
@@ -32,9 +33,24 @@ var phoneGap = {
       el: '#app',
       router,
       template: '<App/>',
-      components: { App }
+      components: { App },
+      sockets: {
+        connect: function () {
+          console.log('socket connected')
+        },
+        customEmit: function (val) {
+          console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
+        }
+      },
+      methods: {
+        clickButton: function (val) {
+          // $socket is socket.io-client instance
+          this.$socket.emit('emit_method', val)
+        }
+      }
     })
   }
 }
 
 phoneGap.initialize()
+Vue.use(VueSocketio, 'http://io.peh4.com:3001')

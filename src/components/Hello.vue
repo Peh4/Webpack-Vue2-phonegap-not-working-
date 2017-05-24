@@ -33,6 +33,8 @@ $.when(
 ).done(function (data) {
   salon = data[0][0].title.rendered
   console.log(data[0][0].title.rendered)
+}).fail(function (err) {
+  salon = err
 })
 
 export default {
