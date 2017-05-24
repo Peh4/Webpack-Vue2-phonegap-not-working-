@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
+    <h1 v-html="msg"></h1>
     <h2>Essential Links</h2>
     <ul>
       <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
@@ -21,11 +21,25 @@
 </template>
 
 <script>
+
+var $ = require('jquery')
+
+var salons = 'http://bazarettes.peh4.com/wp-json/wp/v2/posts'
+var salon = [{ 'title': 'tot' }]
+
+$.when(
+  $.getJSON(salons),
+  $.ready
+).done(function (data) {
+  salon = data[0][0].title.rendered
+  console.log(data[0][0].title.rendered)
+})
+
 export default {
   name: 'hello',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: salon
     }
   }
 }
