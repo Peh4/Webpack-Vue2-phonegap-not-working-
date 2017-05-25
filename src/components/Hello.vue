@@ -1,50 +1,44 @@
 <template>
   <div class="hello">
     <h1 v-html="msg"></h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://gitter.im/vuejs/vue" target="_blank">Gitter Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-      <br>
-      <li><a href="http://vuejs-templates.github.io/webpack/" target="_blank">Docs for This Template</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button @click="joinChat">Send</button>
+    </form>
   </div>
 </template>
 
 <script>
 
-var $ = require('jquery')
-
-var salons = 'http://bazarettes.peh4.com/wp-json/wp/v2/posts'
-var salon = [{ 'title': 'tot' }]
-
-$.when(
-  $.getJSON(salons),
-  $.ready
-).done(function (data) {
-  salon = data[0][0].title.rendered
-  console.log(data[0][0].title.rendered)
-}).fail(function (err) {
-  salon = err
-})
-
 export default {
   name: 'hello',
   data () {
     return {
-      msg: salon
+      msg: ''
+    }
+  },
+  mounted: function () {
+    var jquery = require('jquery')
+    var salons = 'http://bazarettes.peh4.com/wp-json/wp/v2/posts'
+    var vm = this
+    jquery.when(
+      jquery.getJSON(salons),
+      jquery.ready
+    ).done(function (data) {
+      vm.msg = data[0][0].title.rendered
+    }).fail(function (err) {
+      console.log('JSON load fail' + err)
+    })
+  },
+  methods: {
+    joinChat: function (name) {
+      if (name.target.previousSibling.value) {
+        this.$socket.emit('join', name.target.previousSibling.value)
+      }
     }
   }
 }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
