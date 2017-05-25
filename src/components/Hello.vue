@@ -1,7 +1,11 @@
 <template>
   <div class="hello">
     <h1 v-html="msg"></h1>
-    <ul id="messages"></ul>
+    <ul>
+      <li v-for="user in userList">
+        {{user.name}}
+      </li>
+    </ul>
     <form action="">
       <input id="m" autocomplete="off" /><button @click="joinChat">Send</button>
     </form>
@@ -14,7 +18,18 @@ export default {
   name: 'hello',
   data () {
     return {
-      msg: ''
+      msg: '',
+      userList: []
+    }
+  },
+  sockets: {
+    'add user': function (data) {
+      this.userList = data.users
+      console.log(data)
+    },
+    'on join': function (data) {
+      this.userList = data.users
+      console.log(data.users)
     }
   },
   mounted: function () {
@@ -33,7 +48,12 @@ export default {
   methods: {
     joinChat: function (name) {
       if (name.target.previousSibling.value) {
-        this.$socket.emit('join', name.target.previousSibling.value)
+        this.$socket.emit('join', {
+          'name': name.target.previousSibling.value,
+          'id': null,
+          'team': null
+        })
+        console.log('join ' + name.target.previousSibling.value)
       }
     }
   }

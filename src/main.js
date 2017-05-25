@@ -37,7 +37,7 @@ var phoneGap = {
     var $ = require('jquery')
 
     /* eslint-disable no-new */
-    new Vue({
+    var vm = new Vue({
       el: '#app',
       router,
       template: '<App/>',
@@ -45,7 +45,7 @@ var phoneGap = {
       data: {
         join: false,
         name: null,
-        users: null,
+        users: [],
         message: null,
         messages: {}
       },
@@ -58,47 +58,16 @@ var phoneGap = {
       },
       sockets: {
         connect: function () {
-          console.log('socket connectedqsxqs')
-          this.$socket.emit('new message', 'connect')
+          console.log('socket conected')
         },
-        'new message': function (data) {
-          console.log('message: ' + data.content)
-        },
-        'add user': function (username) {
-          console.log('add user ' + username)
-        },
-        'user joined': function (username) {
-          console.log('user joined ' + username)
-        },
-        typing: function (val) {
-          console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
-        },
-        users: function (users) {
-          this.$set('users', users)
-        },
-        joined: function (username) {
-          this.join = true
-          console.log('user joined ' + username.username)
-        },
-        messages: function (data) {
-          this.$set('messages', data)
-        },
-        onmessage: function (data) {
-          this.messages.push(data)
-        },
-        adduser: function (user) {
-          this.users.push(user)
-        }
-      },
-      methods: {
-        send: function (message) {
-          if (message) {
-            this.$socket.emit('send', message)
-            this.$set('message', null)
-          }
+        'add user': function (data) {
+          this.users.push(data)
+          console.log(data.name)
         }
       }
     })
+
+    console.log(vm.users)
   }
 }
 
