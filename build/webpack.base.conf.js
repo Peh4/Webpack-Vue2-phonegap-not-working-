@@ -30,7 +30,7 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.scss$/,
+        test: /\.s[a|c]ss$/,
         loaders: ["style-loader", "css-loader", "sass-loader"]
       }
     ],

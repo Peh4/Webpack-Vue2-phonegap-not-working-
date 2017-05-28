@@ -6,7 +6,7 @@
         {{user.name}}
       </li>
     </ul>
-    <messages :messages="messages"></messages>
+    <messages id="messages" :messages="messages"></messages>
     <p v-if="isWriting">Quelqu'un écrit un message…</p>
     <form id="text" action="">
       <input v-model="inputBar" autocomplete="off" /><button @click="joinChat">{{btn}}</button>
@@ -33,7 +33,8 @@ export default {
       isWriting: false,
       usersTyping: {},
       name: '',
-      team: ''
+      team: '',
+      previousAuthor: ''
     }
   },
   watch: {
@@ -49,7 +50,7 @@ export default {
     },
     messages: function () {
       setTimeout(function () {
-        jquery('.messages').scrollTop(99999999999)
+        jquery('#messages').scrollTop(99999999999)
         console.log('scroll')
       }, 100)
     }
@@ -66,8 +67,11 @@ export default {
     'on leave': function (data) {
     },
     'on message': function (data) {
+      if (this.previousAuthor === data.username) {
+        data.samePreviousAuthor = true
+      }
       this.messages.push(data)
-      console.log(this.messages)
+      this.previousAuthor = data.username
     },
     'on typing on': function (data) {
       this.usersTyping[data.username] = data.username
@@ -122,7 +126,8 @@ export default {
           console.log('join ' + this.name + ' de la team ' + this.team)
         } else {
           this.$socket.emit('message', input)
-          this.messages.push({username: this.name, team: this.team, content: input})
+          this.previousAuthor = 'me'
+          this.messages.push({username: this.name, team: this.team, content: input, samePreviousAuthor: false, me: true})
           this.inputBar = ''
         }
       }
@@ -136,10 +141,14 @@ export default {
 <style scoped>
   .hello {
     margin: 0 auto;
-    width: 500px;
-    border: 1px solid #ff4;
+    max-width: 500px;
     position: relative;
 
+  }
+  #messages {
+    height: 500px;
+    padding: 2px 2px 5px 20px;
+    overflow-y: auto;
   }
   #text {
     position: fixed;
