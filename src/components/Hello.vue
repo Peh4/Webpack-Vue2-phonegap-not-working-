@@ -8,14 +8,15 @@
     </ul>
     <messages :messages="messages"></messages>
     <p v-if="isWriting">Quelqu'un écrit un message…</p>
-    <form action="">
-      <input v-model="inputBar" id="text" autocomplete="off" /><button @click="joinChat">{{btn}}</button>
+    <form id="text" action="">
+      <input v-model="inputBar" autocomplete="off" /><button @click="joinChat">{{btn}}</button>
     </form>
   </div>
 </template>
 
 <script>
 import Messages from './Messages.vue'
+var jquery = require('jquery')
 export default {
   name: 'hello',
   components: {
@@ -45,6 +46,12 @@ export default {
         this.$socket.emit('typing off')
         this.typing = false
       }
+    },
+    messages: function () {
+      setTimeout(function () {
+        jquery('.messages').scrollTop(99999999999)
+        console.log('scroll')
+      }, 100)
     }
   },
   sockets: {
@@ -81,7 +88,6 @@ export default {
     }
   },
   mounted: function () {
-    var jquery = require('jquery')
     var salons = 'http://bazarettes.peh4.com/wp-json/wp/v2/posts'
     var vm = this
     jquery.when(
@@ -130,8 +136,25 @@ export default {
 <style scoped>
   .hello {
     margin: 0 auto;
-    max-width: 500px;
-    background-color: #fff; 
+    width: 500px;
+    border: 1px solid #ff4;
+    position: relative;
+
+  }
+  #text {
+    position: fixed;
+    bottom: 2px;
+    left: 2px;
+    
+    width: 100%;
+    text-align: center;
+    box-shadow: none;
+
+  }
+  #text input {
+      background: #fff none;
+      border: none;
+      padding: 4px;
   }
   
 </style>

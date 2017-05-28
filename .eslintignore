@@ -1,2 +1,4 @@
 build/*.js
 config/*.js
+src/assets/bower_components/font-awesome/*
+src/assets/bower_components/KNACSS/*

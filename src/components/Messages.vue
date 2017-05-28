@@ -1,7 +1,7 @@
 <template>
     <ul class="messages">
       <li class="message" v-for="message in messages" :class="message.team">
-        <p class="user"> {{message.username}} </p>
+        <p v-if="sameLastAuthor" class="user"> {{message.username}} </p>
         <p class="content"> {{message.content}} </p>
       </li>
     </ul>
@@ -20,15 +20,21 @@
   .message {
     clear: both;
     padding: 2px;
+
   }
   .user {
-    width: 60px;
-    height: 60px;
+    width: 30px;
+    height: 30px;
     background: #fff4ff;
     float:left;
     margin-right: 7px; 
   }
   .content {
     float:left;
+    background: #fff none;
+    color: #212522;
+    border-radius: 10px;
+    padding: 5px 8px; 
+
   }
 </style>

@@ -34,8 +34,6 @@ var phoneGap = {
   receivedEvent: function (id) {
     Vue.use(VueSocketio, 'http://io.peh4.com:3001') // Automaticly socket connect from url string
 
-    var $ = require('jquery')
-
     /* eslint-disable no-new */
     var vm = new Vue({
       el: '#app',
@@ -48,13 +46,6 @@ var phoneGap = {
         users: [],
         message: null,
         messages: {}
-      },
-      watch: {
-        messages: function () {
-          setTimeout(function () {
-            $('.messages ul').scrollTop(999999999)
-          }, 100)
-        }
       },
       sockets: {
         connect: function () {
