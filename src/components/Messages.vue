@@ -16,6 +16,7 @@
     name: 'messages',
     props: ['messages']
   }
+  
 </script>
 
 <style lang="scss" rel='stylesheet/scss' scoped>
