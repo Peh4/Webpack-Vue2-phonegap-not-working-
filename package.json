@@ -5,11 +5,13 @@
   "author": "Peh4 <peha@free.fr>",
   "private": true,
   "scripts": {
-    "dev": "npm-run-all --parallel watch serve",
+    "dev": "webpack --config ./build/webpack.dev.conf.js --display-error-details --watch & phonegap serve",
+    "build": "webpack --config ./build/webpack.prod.conf.js --display-error-details --colors",
+    "dev2": "npm-run-all --parallel watch serve",
     "serve": "phonegap serve --port 3005",
     "watch": "webpack --watch --config build/webpack.dev.conf.js",
     "start": "node build/dev-server.js",
-    "build": "node build/build.js",
+    "build2": "node build/build.js",
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
