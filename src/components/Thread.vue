@@ -1,6 +1,5 @@
 <template>
     <ul class="thread">
-    {{ test }}
       <li class="message" v-for="message in thread" :class="[message.team, {isay: message.me}, {samePreviousAuthor: message.samePreviousAuthor}]">
         <p class="name">{{message.username}} : {{message.team}}</p>
         <div>
@@ -19,15 +18,16 @@
     name: 'thead',
     computed: mapState([
       'thread',
-      'test'
+      'previousAuthor'
     ]),
     sockets: {
       'on message': function (socketData) {
+        console.log(socketData.username + '/' + this.previousAuthor)
         if (this.previousAuthor === socketData.username) {
           socketData.samePreviousAuthor = true
         }
         this.$store.commit('addMessage', socketData)
-        this.previousAuthor = socketData.username
+        this.$store.commit('setPreviousAuthor', socketData.username)
       }
     }
   }

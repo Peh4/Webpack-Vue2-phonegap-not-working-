@@ -5,11 +5,9 @@ export const state = {
     id: 'null',
     writing: false
   },
-  wpjson: {},
   thread: [],
-  userswriting: {},
   connected: {},
-  test: 'test'
+  previousAuthor: ''
 }
 
 export const mutations = {
@@ -18,6 +16,9 @@ export const mutations = {
   },
   setMyTeam (state, team) {
     state.me.team = team
+  },
+  setPreviousAuthor (state, author) {
+    state.previousAuthor = author
   },
   addMessage (state, message) {
     state.thread.push(message)
