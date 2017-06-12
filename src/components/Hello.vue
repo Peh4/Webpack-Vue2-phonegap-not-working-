@@ -44,7 +44,7 @@ export default {
       console.log('on join')
     },
     erreur: function (data) {
-      console.log(data)
+      console.log('ERROR ' + data)
     }
   },
   mounted: function () {

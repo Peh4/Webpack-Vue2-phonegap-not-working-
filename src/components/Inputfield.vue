@@ -60,7 +60,7 @@ export default {
           console.log('join ' + this.me.username + ' de la team ' + this.me.team)
         } else {
           this.$socket.emit('message', input)
-          this.previousAuthor = 'me'
+          this.$store.commit('setPreviousAuthor', 'me')
           this.$store.commit('addMessage', {username: this.me.name, team: this.me.team, content: input, samePreviousAuthor: false, me: true})
           this.resetInput()
         }

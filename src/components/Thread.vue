@@ -26,8 +26,8 @@
         if (this.previousAuthor === socketData.username) {
           socketData.samePreviousAuthor = true
         }
-        this.$store.commit('addMessage', socketData)
         this.$store.commit('setPreviousAuthor', socketData.username)
+        this.$store.commit('addMessage', socketData)
       }
     }
   }
