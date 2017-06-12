@@ -1,40 +1,29 @@
 <template>
   <div class="hello">
     <h1 v-html="title"></h1>
-    <ul>
-      <li v-for="user in users">
-        {{user.name}}
-      </li>
-    </ul>
-    <messages id="messages" :messages="messages"></messages>
-    <p v-if="isWriting">Quelqu'un écrit un message…</p>
-    <form id="text" action="">
-      <input v-model="inputBar" autocomplete="off" /><button @click="joinChat">{{btn}}</button>
-    </form>
+    <connected></connected>
+    <thread id="thread"></thread>
+    <inputfield></inputfield>
   </div>
 </template>
 
 <script>
-import Messages from './Messages.vue'
+
+import Thread from './Thread.vue'
+import Inputfield from './Inputfield.vue'
+import Connected from './Connected.vue'
 var jquery = require('jquery')
+
 export default {
   name: 'hello',
   components: {
-    Messages
+    Thread,
+    Inputfield,
+    Connected
   },
   data () {
     return {
-      title: 'loading',
-      inputBar: '',
-      btn: 'name',
-      messages: [],
-      users: {},
-      typing: false,
-      isWriting: false,
-      usersTyping: {},
-      name: '',
-      team: '',
-      previousAuthor: ''
+      title: 'loading'
     }
   },
   watch: {
@@ -47,12 +36,6 @@ export default {
         this.$socket.emit('typing off')
         this.typing = false
       }
-    },
-    messages: function () {
-      setTimeout(function () {
-        jquery('#messages').scrollTop(99999999999)
-        console.log('scroll')
-      }, 100)
     }
   },
   sockets: {
@@ -60,38 +43,12 @@ export default {
       this.users = data.users
       console.log('on join')
     },
-    'joined': function (data) {
-      this.users = data.users
-      this.btn = 'message'
-    },
-    'on leave': function (data) {
-    },
-    'on message': function (data) {
-      if (this.previousAuthor === data.username) {
-        data.samePreviousAuthor = true
-      }
-      this.messages.push(data)
-      this.previousAuthor = data.username
-    },
-    'on typing on': function (data) {
-      this.usersTyping[data.username] = data.username
-      console.log(data.username + ' strat typing')
-      if (Object.keys(this.usersTyping).length) {
-        this.isWriting = true
-      }
-    },
-    'on typing off': function (data) {
-      delete this.usersTyping[data.username]
-      console.log(data.username + ' stop typing')
-      if (!Object.keys(this.usersTyping).length) {
-        this.isWriting = false
-      }
-    },
     erreur: function (data) {
       console.log(data)
     }
   },
   mounted: function () {
+    console.log('test')
     var salons = 'http://bazarettes.peh4.com/wp-json/wp/v2/posts'
     var vm = this
     jquery.when(
@@ -102,36 +59,6 @@ export default {
     }).fail(function (err) {
       console.log('JSON load fail' + err)
     })
-  },
-  methods: {
-    resetInput: function () {
-      this.inputBar = ''
-    },
-    joinChat: function (entry) {
-      var input = entry.target.previousSibling.value
-      if (input) {
-        if (!this.name) {
-          this.name = input
-          this.btn = 'équipe'
-          this.resetInput()
-        } else if (!this.team) {
-          this.team = input
-          this.inputBar = ''
-          this.$socket.emit('join', {
-            'name': this.name,
-            'id': null,
-            'team': this.team
-          })
-          this.btn = 'message'
-          console.log('join ' + this.name + ' de la team ' + this.team)
-        } else {
-          this.$socket.emit('message', input)
-          this.previousAuthor = 'me'
-          this.messages.push({username: this.name, team: this.team, content: input, samePreviousAuthor: false, me: true})
-          this.inputBar = ''
-        }
-      }
-    }
   }
 }
 
@@ -145,25 +72,11 @@ export default {
     position: relative;
 
   }
-  #messages {
+  #thread {
     height: 500px;
     padding: 2px 2px 5px 20px;
     overflow-y: auto;
   }
-  #text {
-    position: fixed;
-    bottom: 2px;
-    left: 2px;
-    
-    width: 100%;
-    text-align: center;
-    box-shadow: none;
 
-  }
-  #text input {
-      background: #fff none;
-      border: none;
-      padding: 4px;
-  }
   
 </style>

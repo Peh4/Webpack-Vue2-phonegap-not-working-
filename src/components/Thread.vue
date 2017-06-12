@@ -1,6 +1,7 @@
 <template>
-    <ul class="messages">
-      <li class="message" v-for="message in messages" :class="[message.team, {isay: message.me}, {samePreviousAuthor: message.samePreviousAuthor}]">
+    <ul class="thread">
+    {{ test }}
+      <li class="message" v-for="message in thread" :class="[message.team, {isay: message.me}, {samePreviousAuthor: message.samePreviousAuthor}]">
         <p class="name">{{message.username}} : {{message.team}}</p>
         <div>
           <div class="user"> <span class="team"></span> </div>
@@ -12,9 +13,23 @@
     </ul>
 </template>
 <script>
+  import { mapState } from 'vuex'
+
   export default {
-    name: 'messages',
-    props: ['messages']
+    name: 'thead',
+    computed: mapState([
+      'thread',
+      'test'
+    ]),
+    sockets: {
+      'on message': function (socketData) {
+        if (this.previousAuthor === socketData.username) {
+          socketData.samePreviousAuthor = true
+        }
+        this.$store.commit('addMessage', socketData)
+        this.previousAuthor = socketData.username
+      }
+    }
   }
   
 </script>

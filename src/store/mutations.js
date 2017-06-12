@@ -1,16 +1,35 @@
 export const state = {
-  username: '',
-  userteam: '',
+  me: {
+    username: '',
+    team: '',
+    id: 'null',
+    writing: false
+  },
   wpjson: {},
   thread: [],
-  iswriting: false,
   userswriting: {},
-  userslist: {}
+  connected: {},
+  test: 'test'
 }
 
 export const mutations = {
-  setUser (state, name, team) {
-    state.username = name
-    state.userteam = team
+  setMyName (state, name, team) {
+    state.me.username = name
+  },
+  setMyTeam (state, team) {
+    state.me.team = team
+  },
+  addMessage (state, message) {
+    state.thread.push(message)
+  },
+  updateConnected (state, users) {
+    state.connected = users
+  }
+}
+
+export const actions = {
+  setUser (context, name, team) {
+    context.commit('setMyName', name)
+    context.commit('setMyTeam', team)
   }
 }
